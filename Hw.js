@@ -1,113 +1,105 @@
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
 
-   const backImage = new Image();
-  backImage.src= "dasht.png";
+const backImage = new Image();
+backImage.src= "http://www.yim778.com/data/out/79/904644.jpg";
 
-  const RectsIntersection = function(rect1X, rect1Y, rect1W, rect1H, rect2X, rect2Y, rect2W, rect2H) {
+const player1nkar = new Image();
+player1nkar.src = "https://images.vexels.com/media/users/3/141148/isolated/preview/716b4a53cd25869a4473d1df9257330d-santa-claus-cartoon-7-by-vexels.png";
+
+const player2nkar = new Image();
+player2nkar.src = "https://images.vexels.com/media/users/3/141148/isolated/preview/716b4a53cd25869a4473d1df9257330d-santa-claus-cartoon-7-by-vexels.png"; 
+
+const ballImage = new Image();
+ballImage.src = "http://weclipart.com/gimg/4B69D77980E5B22F/christmas-presents-clip-art-happy-holidays-830x889.png"
+const RectsIntersection = function(rect1X, rect1Y, rect1W, rect1H, rect2X, rect2Y, rect2W, rect2H) {
     return rect1X < rect2X + rect2W && rect1X + rect1W > rect2X && rect1Y < rect2Y + rect2H && rect1H + rect1Y > rect2Y;
   };
-  
-const rand = function(num) {
-	return Math.floor(Math.random() * num) + 1;
-};
-  const createPoint = function(num, canvasWidth, canvasHeight){
-	  const a = [];
-	  const r = function(n){
-		if(n<=0){
-			return "";
-		}  
-		const b = 5;
-		a.push({
-			x: rand(canvasWidth - 60),
-			y: rand(canvasHeight - 60),
+  const rand = function(num) {
+    return Math.floor(Math.random() * num);
+  }; 
+const cordinates =	{
+			x: 600,
+			y: 350,
 			width: 30,
 			height:	30,
-			xDelta: b,
-			yDelta: b,
-			color: "white"
-		})
-		r(n-1);
-	  }
-	  r(num);
-	  return a;
-  };
-  const point = createPoint(1, canvas.width,canvas.height);
-  const hero = {
+			xDelta: 5,
+			yDelta: 5,
+			color: "red"
+		};
+  
+const player1 = {
   		x: 50,
   		y:10,
-  		width:26,
-  		height:70,
+  		width:100,
+  		height:150,
   		score: 0
   };
-  const hero2 = {
-  	x: 1150,
+const player2 = {
+  	x: 1050,
   	y: 10,
-  	width:26,
-  	height:70,
+  	width:100,
+  	height:150,
   	score: 0
   };
-  const draw = function(){  
+const draw = function(){  
 context.clearRect(0,0,canvas.width,canvas.height);
-	  const drawEvery = function(arr,i){
-		  if(i === arr.length){
-			  return "";
-		  }
 		  context.drawImage(backImage, 0, 0, canvas.width, canvas.height);
-		  context.fillStyle = arr[i].color;
-		context.fillRect(arr[i].x,arr[i].y, arr[i].width,arr[i].height);
-		context.fillRect(hero.x,hero.y,hero.width,hero.height);
-		context.fillRect(hero2.x,hero2.y,hero2.width,hero2.height);
+		  context.fillStyle = cordinates.color;
+		context.drawImage(ballImage,cordinates.x,cordinates.y, cordinates.width,cordinates.height);
+		context.drawImage(player1nkar,player1.x,player1.y,player1.width,player1.height);
+		context.drawImage(player2nkar,player2.x,player2.y,player2.width,player2.height);
 		context.font = "40px Arial";
-    	context.fillText(Math.floor(hero.score), 300,50);
-    	 context.fillText(Math.floor(hero2.score), 900,50);
-		  drawEvery(arr,i+1);
-	  };
-	  drawEvery(point,0);
+    	context.fillText(player1.score, 300,50);
+    	 context.fillText(player2.score, 900,50);
   };
- 
+ const img=["http://images.clipartpanda.com/gift-clipart-bTyMAyXTL.png","http://www.covenanthousebc.org/wp-content/uploads/2014/12/christmas_present_2[1].png","http://images.clipartpanda.com/gift-clipart-Christmas-Gift-Clip-Art-Templates-Geographics-2.png","http://res.freestockphotos.biz/pictures/7/7065-illustration-of-a-blue-wrapped-present-pv.png","https://cdn.pixabay.com/photo/2014/04/03/10/22/gift-box-310224_960_720.png","http://weclipart.com/gimg/DAF632B843A2215B/xmas-present.gif","http://www.iconarchive.com/download/i60915/himacchi/sweetbox/gift.ico"]
   
   const updateData = function(){
-	  const forevery = function(arr, i){
-		  if(i === arr.length){
-			  return "";
-		  }
-		  if(arr[i].x >= canvas.width-arr[i].width){
-			arr[i].x=hero2.x-arr[i].width;
-			arr[i].y=hero2.y;
-			hero.score+=1;
-			arr[i].xDelta = -arr[i].xDelta;
-		}else if(arr[i].x<=0){
-			arr[i].x=hero.x+hero.width;
-			arr[i].y=hero.y;
-			hero2.score+=1;
-			arr[i].xDelta = -arr[i].xDelta;
+		  if(cordinates.x >= canvas.width-cordinates.width){
+			cordinates.x=player2.x-cordinates.width;
+			cordinates.y=player2.y;
+			player1.score+=1;
+			ballImage.src=img[rand(6)];
+			cordinates.xDelta = -cordinates.xDelta;
+			if(player1.score===10){ 
+				alert("Player1 win !!!!");
+				player2.score=0;
+				player1.score=0;
+			}
+		}else if(cordinates.x<=0){
+			cordinates.x=player1.x+player1.width;
+			cordinates.y=player1.y;
+			player2.score+=1;
+			ballImage.src=img[rand(6)];
+			if(player2.score===10){ 
+				alert("Player2 win !!!!");
+				player2.score=0;
+				player1.score=0;
+			}
+			cordinates.xDelta = -cordinates.xDelta;
 		}
-		if(arr[i].y >= canvas.height-arr[i].height){
-			arr[i].yDelta = -arr[i].yDelta;
-		}else if(arr[i].y<=0){
-			arr[i].yDelta = -arr[i].yDelta;
+		if(cordinates.y >= canvas.height-cordinates.height){
+			cordinates.yDelta = -cordinates.yDelta;
+		}else if(cordinates.y<=0){
+			cordinates.yDelta = -cordinates.yDelta;
 		}
-		arr[i].x =	 arr[i].x + arr[i].xDelta;
-		arr[i].y = arr[i].y + arr[i].yDelta;
+		cordinates.x =	 cordinates.x + cordinates.xDelta;
+		cordinates.y = cordinates.y + cordinates.yDelta;
+
+    if(RectsIntersection(player1.x,player1.y,player1.width,player1.height,cordinates.x,cordinates.y,cordinates.width,cordinates.height)){
+        cordinates.xDelta = - cordinates.xDelta;
+      }else if(RectsIntersection(player2.x,player2.y,player2.width,player2.height,cordinates.x,cordinates.y,cordinates.width,cordinates.height)){
+        cordinates.xDelta = - cordinates.xDelta;
+      } 
 		
-		forevery(arr,i+1);
-	  };
-	  forevery(point,0);
   };
-  const updateData1 = function(){
-  		if(RectsIntersection(hero.x,hero.y,hero.width,hero.height,point[0].x,point[0].y,point[0].width,point[0].height)){
-  			point[0].xDelta = - point[0].xDelta;
-  		}else if(RectsIntersection(hero2.x,hero2.y,hero2.width,hero2.height,point[0].x,point[0].y,point[0].width,point[0].height)){
-  			point[0].xDelta = - point[0].xDelta;
-  		}	
-  }
+  
 
 const loop = function(){
     
     draw();
     updateData();
-    updateData1();
     window.requestAnimationFrame(loop);
   };
   
@@ -117,30 +109,31 @@ const loop = function(){
   const w = 87;
   const s = 83;
    document.addEventListener('keydown', function(event) {
+    event.preventDefault();
   
     if(event.keyCode === upKey) {
-      if(hero.y>= 0 && hero.y<= canvas.height-hero.height) {
-        hero.y= hero.y - 15;
+      if(player1.y>= 0 && player1.y<= canvas.height-player1.height) {
+        player1.y= player1.y - 15;
       }		
-      else if(hero.y<3){hero.y=3;}
+      else if(player1.y<3){player1.y=3;}
     }
     else if(event.keyCode === downKey){
-      if(hero.y>= 0 && hero.y<= canvas.height-hero.height) {
-        hero.y= hero.y +  15;      }
-      else if(hero.y>=canvas.height-hero.height){hero.y=canvas.height-hero.height;}
+      if(player1.y>= 0 && player1.y<= canvas.height-player1.height) {
+        player1.y= player1.y +  15;      }
+      else if(player1.y>=canvas.height-player1.height){player1.y=canvas.height-player1.height;}
     }
   }, false);
 
      document.addEventListener('keydown', function(event) {
    if(event.keyCode === w){
-   	if(hero2.y>= 0 ) {
-        hero2.y= hero2.y - 15;
+   	if(player2.y>= 0 ) {
+        player2.y= player2.y - 15;
       	}
-      	else if(hero2.y<3){hero2.y=3;}
+      	else if(player2.y<3){player2.y=3;}
       }	
    else if(event.keyCode === s){
-      if(hero2.y>= 0 && hero2.y<= canvas.height-hero2.height) {
-        hero2.y= hero2.y +  15;      }
+      if(player2.y>= 0 && player2.y<= canvas.height-player2.height) {
+        player2.y= player2.y +  15;      }
     }
    
   }, false);
